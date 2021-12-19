@@ -1,4 +1,6 @@
 mod base;
+mod shape;
+mod stride;
 mod window;
 
 #[cfg(test)]
