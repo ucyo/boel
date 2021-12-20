@@ -1,5 +1,4 @@
 mod base;
-pub mod config;
 mod shape;
 mod stride;
 
