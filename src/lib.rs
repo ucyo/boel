@@ -1,7 +1,7 @@
 mod base;
+pub mod config;
 mod shape;
 mod stride;
-mod window;
 
 #[cfg(test)]
 mod tests {

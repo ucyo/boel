@@ -1,8 +1,29 @@
-use clap::{App, AppSettings, Arg};
+use boel::config::{Configuration, Endianess, Nbytes};
+use clap::{App, Arg};
 
 fn main() {
     let matches = configure().get_matches();
-    println!("{:?}", matches)
+    let filename = matches.value_of("FILE").unwrap();
+    let nbytes = if matches.is_present("nbytes") {
+        Nbytes::Bytes(
+            matches
+                .value_of("nbytes")
+                .unwrap()
+                .parse::<usize>()
+                .unwrap(),
+        )
+    } else {
+        Nbytes::Whole
+    };
+    let endian = match matches.value_of("endian").unwrap() {
+        "big" => Endianess::Big,
+        "little" => Endianess::Little,
+        _ => Endianess::Native,
+    };
+    let config = Configuration::new(String::from(filename), nbytes, endian);
+    println!("C {:?}", config);
+    let v: Vec<f64> = Vec::from(config);
+    println!("V {:?}", v);
 }
 
 fn is_usize(input: String) -> Result<(), String> {
