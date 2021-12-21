@@ -6,6 +6,8 @@ use std::fs::File;
 fn main() {
     let matches = configure().get_matches();
     let filename = matches.value_of("FILE").unwrap();
+
+    // Check number of bytes to be read
     let nbytes = if matches.is_present("nbytes") {
         Nbytes::Bytes(
             matches
@@ -17,17 +19,24 @@ fn main() {
     } else {
         Nbytes::Whole
     };
+
+    // Check endianess
     let endian = match matches.value_of("endian").unwrap() {
         "big" => Endianess::Big,
         "little" => Endianess::Little,
         _ => Endianess::Native,
     };
+
+    // Setup configuration
     let config = Configuration::new(String::from(filename), nbytes, endian);
 
+    // Read data using given datatype
     let v = match matches.value_of("datatype").unwrap() {
         "f32" => Data::Float(Vec::from(config)),
         _ => Data::Double(Vec::from(config)),
     };
+
+    // Print result
     println!("{:?}", v);
 }
 
