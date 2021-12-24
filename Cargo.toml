@@ -23,7 +23,3 @@ iai = "0.1.*"
 [[bin]]
 name = "boel"
 path = "bin/cli.rs"
-
-[[bin]]
-name = "rand"
-path = "bin/rand.rs"
