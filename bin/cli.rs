@@ -1,14 +1,12 @@
 use boel::{base::Base, base::Data, shape::Shape};
 use byteorder::{BigEndian, LittleEndian, NativeEndian, ReadBytesExt};
-use clap::{App, Arg};
+use clap::{App, AppSettings, Arg, ArgMatches};
 use log::info;
 use ndarray::{Array, Ix1, Ix2};
 use std::convert::From;
 use std::fs::File;
 
-fn main() {
-    env_logger::init();
-    let matches = configure().get_matches();
+fn run_window_subcommand(matches: &ArgMatches) {
     let filename = matches.value_of("FILE").unwrap();
     info!("{:?}", matches);
 
@@ -100,6 +98,15 @@ fn main() {
     }
 }
 
+fn main() {
+    env_logger::init();
+    let matches = configure().get_matches();
+    match matches.subcommand() {
+        ("window", Some(args)) => run_window_subcommand(args),
+        _ => (),
+    }
+}
+
 fn is_usize(input: String) -> Result<(), String> {
     match input.parse::<usize>() {
         Ok(_) => Ok(()),
@@ -120,6 +127,13 @@ fn configure() -> App<'static, 'static> {
         .version("0.1.0")
         .author("ucyo <cayoglu@me.com>")
         .about("Iterates over data via windows or chunks")
+        .setting(AppSettings::SubcommandRequiredElseHelp)
+        .subcommand(window_subcommand())
+}
+
+fn window_subcommand() -> App<'static, 'static> {
+    App::new("window")
+        .about("Iterate over the data using a windows")
         .arg(
             Arg::with_name("FILE")
                 .help("File to be read")
