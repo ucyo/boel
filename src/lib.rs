@@ -1,6 +1,5 @@
-mod base;
-mod shape;
-mod stride;
+pub mod base;
+pub mod shape;
 
 #[cfg(test)]
 mod tests {
