@@ -11,6 +11,8 @@ default-run = "boel"
 ndarray = "0.15.*"
 byteorder = "1.4.*"
 clap = "2.34.*"
+env_logger = "0.9.*"
+log = "0.4.*"
 
 [dev-dependencies]
 criterion = "0.3.*"

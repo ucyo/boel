@@ -1,13 +1,16 @@
 use boel::{base::Base, base::Data, shape::Shape};
 use byteorder::{BigEndian, LittleEndian, NativeEndian, ReadBytesExt};
 use clap::{App, Arg};
+use log::info;
 use ndarray::{Array, Ix1, Ix2};
 use std::convert::From;
 use std::fs::File;
 
 fn main() {
+    env_logger::init();
     let matches = configure().get_matches();
     let filename = matches.value_of("FILE").unwrap();
+    info!("{:?}", matches);
 
     // Check number of bytes to be read
     let nbytes = if matches.is_present("nbytes") {
@@ -29,7 +32,6 @@ fn main() {
         _ => Endianess::Native,
     };
 
-    // Setup configuration
     // Read data using given datatype
     let dt = match matches.value_of("datatype").unwrap() {
         "f32" => Datatype::Float,
@@ -40,7 +42,7 @@ fn main() {
     let config = Configuration::new(String::from(filename), nbytes, endian, dt);
 
     // Print result
-    println!("{:?}", v);
+    info!("{:?}", config);
 
     // Generate Base
     let base_shape = if matches.is_present("shape") {
@@ -126,7 +128,7 @@ fn configure() -> App<'static, 'static> {
         )
         .arg(
             Arg::with_name("nbytes")
-                .help("Number of bytes to be read from file")
+                .help("Number of bytes to be read from file [defaults to whole file]")
                 .short("b")
                 .long("nbytes")
                 .takes_value(true)
